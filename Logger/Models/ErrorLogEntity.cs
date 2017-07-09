@@ -1,4 +1,5 @@
 ﻿using System;
+using Newtonsoft.Json;
 using Logger.Contracts;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
@@ -14,7 +15,6 @@ namespace Logger.Models
             Date = logDate;
         }
 
-		public ObjectId LogId { get; set; }
 		public string Type
 		{
 			get => "ERROR";
@@ -39,7 +39,7 @@ namespace Logger.Models
 
         public string ToJSON()
         {
-            return this.ToJson();
+            return JsonConvert.SerializeObject(this);
         }
     }
 }

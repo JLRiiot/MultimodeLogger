@@ -21,6 +21,13 @@ namespace Logger
             Repositories.Add(LogRepositoryFactory.CreateFileSystemRepository());
         }
 
+        public Log(LogRepository logRepository)
+		{
+			Repositories.Add(logRepository);
+
+			if (Repositories.Count == 0) throw new Exception(INVALID_CONFIG_ERROR);
+        }
+
         public Log(List<LogRepository> logRepositories)
         {
             Repositories.AddRange(logRepositories);

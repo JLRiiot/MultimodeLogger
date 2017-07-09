@@ -5,8 +5,6 @@ namespace Logger.Contracts
 {
     public interface ILogEntity
     {
-        [BsonId]
-        ObjectId LogId { get; set; }
         [BsonRequired]
         string Type { get; set; }
         [BsonRequired]

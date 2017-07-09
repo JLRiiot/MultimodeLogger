@@ -2,8 +2,6 @@
 
 services: 
   mongodb: 
-    image: 'bitnami/mongodb:latest'
+    image: 'mongo:latest'
     ports: 
       - "27017:27017" 
-    environment:
-      - MONGODB_DATABASE=log_database
