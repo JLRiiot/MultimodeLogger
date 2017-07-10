@@ -1,7 +1,8 @@
 # MultimodeLogger
 
 # IMPORTANT
-In order to be enable to work with a database you must have a MongoDB running in localhost:27017
+- In order to work with a database you must have a MongoDB running in localhost:27017
+- Or you may change the *appsettings.json* file to set your own mongo connection.
 
 ## Extension
 You can extend from LogRepository in order to enable a different loggin type.
