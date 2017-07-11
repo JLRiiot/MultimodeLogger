@@ -10,31 +10,20 @@ namespace LoggerPlayground
 {
     class Program
 	{
-		public static IConfigurationRoot Configuration { get; set; }
-
-        static Program()
-        {
-			var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json");
-
-			Configuration = builder.Build();
-        }
-
         static void Main(string[] args)
         {
+            // Creating a default Log with all persistence types
+            // and all verbose levels
             Log log1 = new Log();
-            log1.SetVerbosityLevels(true, true, true);
-            log1.AddPersistenceRepository(
-                LogRepositoryFactory.CreateDatabaseRepository(
-                    Configuration["mongo_connection"], 
-                    Configuration["mongo_database"]
-                )
-            );
 
             log1.WriteError("Testing error");
 			log1.WriteMessage("Testing if polymorphism works");
             log1.WriteWarning("For this entry _t must be WarningLogEntity");
-        }
+
+			// You can configure your own Log instance with different Repositories
+			// and log verbosity levels using a different constructors:
+			// Log log2 = new Log(<YOUR LOG REPOSITORY>)
+			// Log log2 = new Log(<A LIST OF YOUR LOG REPOSITORIES>)
+		}
     }
 }

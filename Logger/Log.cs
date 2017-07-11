@@ -7,7 +7,8 @@ using Logger.Repositories;
 namespace Logger
 {
     public class Log : ILogger
-    {
+	{
+
         private const string INVALID_CONFIG_ERROR = "Invalid configuration";
 
         private List<LogRepository> Repositories { get; set; } = new List<LogRepository>();
@@ -19,18 +20,30 @@ namespace Logger
         {
 			Repositories.Add(LogRepositoryFactory.CreateConsoleRepository());
             Repositories.Add(LogRepositoryFactory.CreateFileSystemRepository());
+            Repositories.Add(LogRepositoryFactory.CreateDatabaseRepository());
+			this.SetVerbosityLevels(true, true, true);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:Logger.Log"/> class, with only one default repository and all verbosity levels.
+        /// </summary>
+        /// <param name="logRepository">Log repository.</param>
         public Log(LogRepository logRepository)
 		{
 			Repositories.Add(logRepository);
+			this.SetVerbosityLevels(true, true, true);
 
 			if (Repositories.Count == 0) throw new Exception(INVALID_CONFIG_ERROR);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="T:Logger.Log"/> class, with a List of repositories.
+        /// </summary>
+        /// <param name="logRepositories">Log repositories.</param>
         public Log(List<LogRepository> logRepositories)
         {
-            Repositories.AddRange(logRepositories);
+			Repositories.AddRange(logRepositories);
+			this.SetVerbosityLevels(true, true, true);
 
 			if (Repositories.Count == 0) throw new Exception(INVALID_CONFIG_ERROR);
         }
@@ -38,7 +51,7 @@ namespace Logger
         public void AddPersistenceRepository(LogRepository logRepository)
         {
             if (!Repositories.Exists(r => r.Type.Equals(logRepository.Type)))
-                Repositories.Add(logRepository);
+				Repositories.Add(logRepository);
 
             if (Repositories.Count == 0) throw new Exception(INVALID_CONFIG_ERROR);
         }
