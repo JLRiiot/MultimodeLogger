@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using Logger.Contracts;
+using Logger.Factories;
 
 namespace Logger.Repositories
 {
@@ -8,7 +7,7 @@ namespace Logger.Repositories
     {
         public abstract string Type { get; }
 
-        public abstract void WriteLog(ILogEntity logEntity);
+        public abstract string WriteLog(LogEntityFactory logEntityFactory);
         public abstract void Dispose();
     }
 }

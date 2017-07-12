@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Logger.Contracts;
+using Logger.Factories;
 
 namespace Logger.Repositories
 {
@@ -22,12 +23,16 @@ namespace Logger.Repositories
 
         public override string Type { get => "console"; }
 
-		public override void WriteLog(ILogEntity logEntity)
+		public override string WriteLog(LogEntityFactory logEntityFactory)
         {
+            var logEntity = logEntityFactory.CreateLogEntity();
+
 			this.SetConsoleForegroundColor(logEntity.Type);
             string line = logEntity.ToJSON();
 
             Console.WriteLine(line);
+
+            return logEntity.ToJSON();
         }
 
 		public override void Dispose()

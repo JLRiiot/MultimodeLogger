@@ -1,6 +1,7 @@
 using System;
 using Logger;
 using Logger.Contracts;
+using Logger.Factories;
 using Logger.Models;
 using Logger.Repositories;
 using Xunit;
@@ -11,21 +12,20 @@ namespace Test
     {
         public LoggerTest() : base()
         {
-            
         }
 
         #region File log tests
         [Fact]
         public void LogErrorToFile()
         {
-            var repo = LogRepositoryFactory.CreateFileSystemRepository();
-            ILogger logger = new Log(repo);
-            this.EnableAllVerboseLevels(logger);
-
             string message = "TEST MESSAGE";
-            string json = logger.WriteError(message);
 
-            var result = this.DeserializeJsonObject<ErrorLogEntity>(json);
+            var repo = new FileSystemRepositoryFactory().CreateRepository();
+            var errorFactory = new ErrorEntityFactory(message);
+
+            var stringResult = repo.WriteLog(errorFactory);
+
+            var result = this.DeserializeJsonObject<ErrorLogEntity>(stringResult);
 
             Assert.Equal(result.Type, "ERROR");
             Assert.Equal(result.Message, message);
@@ -33,14 +33,14 @@ namespace Test
         [Fact]
         public void LogMessageToFile()
 		{
-			var repo = LogRepositoryFactory.CreateFileSystemRepository();
-			ILogger logger = new Log(repo);
-			this.EnableAllVerboseLevels(logger);
-
 			string message = "TEST MESSAGE";
-			string json = logger.WriteError(message);
 
-			var result = this.DeserializeJsonObject<MessageLogEntity>(json);
+			var repo = new FileSystemRepositoryFactory().CreateRepository();
+			var errorFactory = new MessageEntityFactory(message);
+
+			var stringResult = repo.WriteLog(errorFactory);
+
+			var result = this.DeserializeJsonObject<MessageLogEntity>(stringResult);
 
 			Assert.Equal(result.Type, "MESSAGE");
 			Assert.Equal(result.Message, message);
@@ -48,14 +48,14 @@ namespace Test
         [Fact]
         public void LogWarningToFile()
 		{
-			var repo = LogRepositoryFactory.CreateFileSystemRepository();
-			ILogger logger = new Log(repo);
-			this.EnableAllVerboseLevels(logger);
-
 			string message = "TEST MESSAGE";
-			string json = logger.WriteError(message);
 
-			var result = this.DeserializeJsonObject<WarningLogEntity>(json);
+			var repo = new FileSystemRepositoryFactory().CreateRepository();
+			var errorFactory = new WarningEntityFactory(message);
+
+			var stringResult = repo.WriteLog(errorFactory);
+
+			var result = this.DeserializeJsonObject<WarningLogEntity>(stringResult);
 
 			Assert.Equal(result.Type, "WARNING");
 			Assert.Equal(result.Message, message);
@@ -66,14 +66,14 @@ namespace Test
 		[Fact]
 		public void LogErrorToConsole()
 		{
-			var repo = LogRepositoryFactory.CreateConsoleRepository();
-			ILogger logger = new Log(repo);
-			this.EnableAllVerboseLevels(logger);
-
 			string message = "TEST MESSAGE";
-			string json = logger.WriteError(message);
 
-			var result = this.DeserializeJsonObject<ErrorLogEntity>(json);
+			var repo = new ConsoleRepositoryFactory().CreateRepository();
+			var errorFactory = new ErrorEntityFactory(message);
+
+			var stringResult = repo.WriteLog(errorFactory);
+
+			var result = this.DeserializeJsonObject<ErrorLogEntity>(stringResult);
 
 			Assert.Equal(result.Type, "ERROR");
 			Assert.Equal(result.Message, message);
@@ -82,14 +82,14 @@ namespace Test
 		[Fact]
 		public void LogMessageToConsole()
 		{
-			var repo = LogRepositoryFactory.CreateConsoleRepository();
-			ILogger logger = new Log(repo);
-			this.EnableAllVerboseLevels(logger);
-
 			string message = "TEST MESSAGE";
-			string json = logger.WriteMessage(message);
 
-			var result = this.DeserializeJsonObject<MessageLogEntity>(json);
+			var repo = new ConsoleRepositoryFactory().CreateRepository();
+			var errorFactory = new MessageEntityFactory(message);
+
+			var stringResult = repo.WriteLog(errorFactory);
+
+			var result = this.DeserializeJsonObject<MessageLogEntity>(stringResult);
 
 			Assert.Equal(result.Type, "MESSAGE");
 			Assert.Equal(result.Message, message);
@@ -98,14 +98,14 @@ namespace Test
 		[Fact]
 		public void LogWarningToConsole()
 		{
-			var repo = LogRepositoryFactory.CreateConsoleRepository();
-			ILogger logger = new Log(repo);
-			this.EnableAllVerboseLevels(logger);
-
 			string message = "TEST MESSAGE";
-            string json = logger.WriteWarning(message);
 
-			var result = this.DeserializeJsonObject<WarningLogEntity>(json);
+			var repo = new ConsoleRepositoryFactory().CreateRepository();
+			var errorFactory = new WarningEntityFactory(message);
+
+			var stringResult = repo.WriteLog(errorFactory);
+
+			var result = this.DeserializeJsonObject<WarningLogEntity>(stringResult);
 
 			Assert.Equal(result.Type, "WARNING");
 			Assert.Equal(result.Message, message);
@@ -117,14 +117,14 @@ namespace Test
 		[Fact]
 		public void LogErrorToMongoDb()
 		{
-			var repo = this.CreateMongoRepository();
-			ILogger logger = new Log(repo);
-			this.EnableAllVerboseLevels(logger);
+			string message = "TEST MESSAGE";
 
-			string message = "TEST ERROR";
-			string json = logger.WriteError(message);
+			var repo = new MongoRepositoryFactory().CreateRepository();
+			var errorFactory = new ErrorEntityFactory(message);
 
-			var result = this.DeserializeJsonObject<ErrorLogEntity>(json);
+			var stringResult = repo.WriteLog(errorFactory);
+
+			var result = this.DeserializeJsonObject<ErrorLogEntity>(stringResult);
 
 			Assert.Equal(result.Type, "ERROR");
 			Assert.Equal(result.Message, message);
@@ -132,14 +132,14 @@ namespace Test
 		[Fact]
 		public void LogMessageToMongoDb()
 		{
-			var repo = this.CreateMongoRepository();
-			ILogger logger = new Log(repo);
-			this.EnableAllVerboseLevels(logger);
+			string message = "TEST MESSAGE";
 
-			string message = "TEST ERROR";
-			string json = logger.WriteMessage(message);
+			var repo = new MongoRepositoryFactory().CreateRepository();
+			var errorFactory = new MessageEntityFactory(message);
 
-			var result = this.DeserializeJsonObject<MessageLogEntity>(json);
+			var stringResult = repo.WriteLog(errorFactory);
+
+			var result = this.DeserializeJsonObject<MessageLogEntity>(stringResult);
 
 			Assert.Equal(result.Type, "MESSAGE");
 			Assert.Equal(result.Message, message);
@@ -147,14 +147,14 @@ namespace Test
 		[Fact]
 		public void LogWarningToMongoDb()
 		{
-			var repo = this.CreateMongoRepository();
-			ILogger logger = new Log(repo);
-			this.EnableAllVerboseLevels(logger);
+			string message = "TEST MESSAGE";
 
-			string message = "TEST ERROR";
-			string json = logger.WriteWarning(message);
+			var repo = new MongoRepositoryFactory().CreateRepository();
+			var errorFactory = new WarningEntityFactory(message);
 
-			var result = this.DeserializeJsonObject<WarningLogEntity>(json);
+			var stringResult = repo.WriteLog(errorFactory);
+
+			var result = this.DeserializeJsonObject<WarningLogEntity>(stringResult);
 
 			Assert.Equal(result.Type, "WARNING");
 			Assert.Equal(result.Message, message);

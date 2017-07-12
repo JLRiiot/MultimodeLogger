@@ -1,5 +1,6 @@
 ﻿using System;
 using Logger.Contracts;
+using Logger.Factories;
 
 namespace Logger.Repositories
 {
@@ -19,9 +20,13 @@ namespace Logger.Repositories
             throw new NotImplementedException();
         }
 
-        public override void WriteLog(ILogEntity logEntity)
+        public override string WriteLog(LogEntityFactory logEntityFactory)
         {
+            var logEntity = logEntityFactory.CreateLogEntity();
+
             MongoDbLogService.Insert(logEntity);
+
+            return logEntity.ToJSON();
         }
     }
 }

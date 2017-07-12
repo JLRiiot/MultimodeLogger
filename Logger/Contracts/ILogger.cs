@@ -1,20 +1,21 @@
 ﻿﻿using System;
+using System.Collections.Generic;
+using Logger.Factories;
 using Logger.Repositories;
 
 namespace Logger.Contracts
 {
     public interface ILogger
     {
-        /// <summary>
-        /// Adds one persistence repository, enabling extension.
-        /// </summary>
-        /// <param name="repository">Repository (Create your own repositories eg. EmailLogRepository.</param>
-        void AddPersistenceRepository(LogRepository repository);
+        List<LogRepository> Repositories { get; }
+        void EnableConsole();
+        void EnableMongo();
+        void EnableFileSystem();
+        void EnableOther(LogRepositoryFactory factory);
         void ClearPersistenceRepositories();
 		void SetVerbosityLevels(bool enableError, bool enableWarning, bool enableMessage);
-		void WriteLog(ILogEntity logEntity);
-        string WriteMessage(string mesage);
-        string WriteError(string message);
-        string WriteWarning(string message);
+        void WriteMessage(string mesage);
+        void WriteError(string message);
+        void WriteWarning(string message);
     }
 }

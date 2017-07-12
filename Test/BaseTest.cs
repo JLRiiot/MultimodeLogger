@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Logger.Contracts;
+using Logger.Factories;
 using Logger.Repositories;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
@@ -32,10 +33,7 @@ namespace Test
 
         protected LogRepository CreateMongoRepository()
         {
-            return LogRepositoryFactory.CreateDatabaseRepository(
-                    Configuration["mongo_connection"],
-                    Configuration["mongo_database"]
-            );
+            return new MongoRepositoryFactory().CreateRepository();
         }
     }
 }
